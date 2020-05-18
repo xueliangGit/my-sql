@@ -1,0 +1,25 @@
+{
+  "name": "your-sql",
+  "version": "1.0.0",
+  "description": "your sql tools , let you write mysql like mongoose",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "xuxueliang@sina.cn",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xueliangGit/your-sql.git"
+  },
+  "keywords": [
+    "sql",
+    "mysql",
+    "sql-tools",
+    "mongodb"
+  ],
+  "bugs": {
+    "url": "https://github.com/xueliangGit/your-sql/issues"
+  },
+  "homepage": "https://github.com/xueliangGit/your-sql#readme"
+}
