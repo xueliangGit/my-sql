@@ -1,6 +1,6 @@
 {
   "name": "your-sql",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "your sql tools , let you write mysql like mongoose",
   "main": "index.js",
   "scripts": {
