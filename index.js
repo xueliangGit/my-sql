@@ -2,12 +2,13 @@
  * @Author: xuxueliang
  * @Date: 2020-04-23 20:12:32
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-05-18 12:13:09
+ * @LastEditTime: 2020-07-22 14:59:10
  */
 /*
 
 */
 let DBConfig = null
+let _debug = true
 // @ts-ignore
 var mysql = require('mysql')
 
@@ -41,13 +42,18 @@ function query (sql) {
        */
       function (error, results, fields) {
         connection.end()
-        if (error) reject(error)
-        console.log(`==============================`)
-        console.log(sql)
-        console.log(`-----------`)
-        console.log(results.length)
-        console.log(`==============================｜`)
-        // resolve(deCodeSqlData(results))
+        if (error) {
+          reject(error)
+          return
+        }
+        if (_debug) {
+          console.log(`==============================`)
+          console.log(sql)
+          console.log(`-----------`)
+          console.log(results.length)
+          console.log(`==============================｜`)
+          // resolve(deCodeSqlData(results))
+        }
         resolve(results)
       }
     )
@@ -364,6 +370,9 @@ async function update (...obj) {
   this.way = 'UPDATE'
   this.updateObj = obj[1] && obj[1].$set
   this.updateObjType = (obj[1] && obj[1].$type) || 'normal'
+  if (!this.updateObj) {
+    this.updateObj = obj[1]
+  }
   this.whereObj = [[obj[0]]]
   return await this.exec()
 }
@@ -442,19 +451,21 @@ function findOne (obj) {
  * @param {any} selects
  */
 function populate (
-  { table, path, select = '', keys = 'id', join = 'LEFT' } = paths,
+  { table, path, select = '', keys = 'id', join = 'LEFT', name = '' } = paths,
   selects,
   key = 'id'
 ) {
   if (typeof paths === 'string') {
     table = paths
     path = paths
+    name = path
     select = selects
     keys = key
     join = 'LEFT'
   }
   table = table || path
   select = ' ' + select
+  name = name || path
   if (this.fieldsObj) {
     this.fieldsObj
   }
@@ -470,7 +481,7 @@ function populate (
       .split(' ')
       .map((v) => {
         if (v) {
-          v = table + '.' + v + ' as ' + path + '_' + v
+          v = table + '.' + v + ' as ' + name + '_' + v
         }
         return v
       })
@@ -523,7 +534,8 @@ function creatFn (tableNam) {
   })
   return fn
 }
-module.exports = (dbConfig) => {
+module.exports = (dbConfig, { debug = true }) => {
   DBConfig = dbConfig ? Object.assign({}, dbConfig) : null
+  _debug = !!debug
   return ModelLink
 }
